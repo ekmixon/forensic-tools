@@ -39,7 +39,7 @@ PWD = { 'FRENCH' : ['AZERTY', 'ANNIVERSAIRE', 'BRUXELLES', 'MOTDEPASSE', 'SOLEIL
 
 def loadData(fileName):
     if not os.path.exists(fileName):
-        print('File %s not found!' % (fileName))
+        print(f'File {fileName} not found!')
         sys.exit()
     with open(fileName) as f:
         data = f.read()
@@ -58,7 +58,7 @@ def extractPwd(data,noMostUsed=True):
     passwords = []
     emails = []
     wordAdding = True
-    
+
     for line in data.splitlines():
         if line in lines:
             continue
@@ -123,7 +123,7 @@ def getWordSorted(wordCount, numOfHits):
 def getCorrelateEmailPwd(emails, wordSorted):
     domains = {}
     localParts = {}
-    
+
     for words in wordSorted:
         for word in words[1]:
             for email in emails:
@@ -154,20 +154,17 @@ def main():
     args = p.parse_args()
     fileName = args.filename
 
-    print("Loading %s ..." % (fileName))
+    print(f"Loading {fileName} ...")
     data = loadData(fileName)
-    print('%s characters loaded.' % (len(data)))
+    print(f'{len(data)} characters loaded.')
 
-    if args.most:
-        extractData = extractPwd(data,False)
-    else:
-        extractData = extractPwd(data)
+    extractData = extractPwd(data,False) if args.most else extractPwd(data)
     passwords = extractData['passwords']
     emails = extractData['emails']
-    print('%s passwords extracted.' % (len(passwords)))
+    print(f'{len(passwords)} passwords extracted.')
 
     wordCount = getWordCount(passwords)
-    print('%s uniq passwords found.' % (len(wordCount)))
+    print(f'{len(wordCount)} uniq passwords found.')
 
     wordSorted = getWordSorted(wordCount, numOfHits)
     print('\nCalculate weighting for interesting passwords:')

@@ -36,18 +36,18 @@ class Parser(xml.sax.ContentHandler):
                 self.currentdate = v
         if name == "Provider":
             for (k,v) in attrs.items():
-                if k.startswith("EventSourceName"):
-                    if v.startswith("Service Control Manager"):
-                        self.isSCM = True 
+                if k.startswith("EventSourceName") and v.startswith(
+                    "Service Control Manager"
+                ):
+                    self.isSCM = True
         if name == "Data":
             for (k,v) in attrs.items():
                 self.hasdata = True
 
     def characters(self,content):
-        if self.isSCM == True and self.hasdata == True:
-            if len(content) > 1:
-                self.msg.append(unidecode(content))
-                self.hasdata =  True
+        if self.isSCM == True and self.hasdata == True and len(content) > 1:
+            self.msg.append(unidecode(content))
+            self.hasdata =  True
 
     def endElement(self,name):
         if name == "Event":

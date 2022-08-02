@@ -76,12 +76,12 @@ class EvtxHandler(xml.sax.ContentHandler):
 
         if name == "Data":
             for (k,v) in attrs.items():
-                if v=="TargetUserName":
-                    self.inTargetUserName = True
-                if v == "TargetLogonId":
-                    self.inTargetLogonId = True
                 if v == "LogonType":
                     self.inLogonType = True
+                elif v == "TargetLogonId":
+                    self.inTargetLogonId = True
+                elif v == "TargetUserName":
+                    self.inTargetUserName = True
 
     def characters(self,content):
         if self.inEventID:
